@@ -12,7 +12,8 @@
 */
 
 Route::get('/', 'BlogFeedController@index');
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/addArticle','ArticlesController@addArticle');
+Route::get('/addCategory','CategoriesController@addCategory');

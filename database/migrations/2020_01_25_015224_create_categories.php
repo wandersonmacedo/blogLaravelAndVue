@@ -16,9 +16,11 @@ class CreateCategories extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->date('createdAt');
-            $table->date('updatedAt');
+            $table->string('created_by')->references('id')->on('users');
+            $table->date('created_at');
+            $table->date('updated_at');
         });
+
     }
 
     /**

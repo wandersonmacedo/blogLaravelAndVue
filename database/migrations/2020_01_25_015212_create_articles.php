@@ -18,9 +18,10 @@ class CreateArticles extends Migration
             $table->string('title');
             $table->string('image');
             $table->longText('content');
-            $table->integer('categorieId');
-            $table->date('createdAt');
-            $table->date('updatedAt');
+            $table->integer('categorie_id')->references('id')->on('categories');
+            $table->integer('author')->references('id')->on('users');
+            $table->date('created_at');
+            $table->date('updated_at');
         });
     }
 
