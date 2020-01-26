@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
     @section('content')
-    <blogfeed-component article="{{article}}"></blogfeed-component>
+        <blogfeed-component></blogfeed-component>
+
     @endsection

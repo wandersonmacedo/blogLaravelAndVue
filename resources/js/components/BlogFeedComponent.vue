@@ -1,34 +1,45 @@
 <template>
     <div class="container">
         <h1>Articles</h1>
-        @foreach($articles as $article)
-        <article>
+        <article v-for='post in articles' :key='post.id'>
             <header>
-                <h1>{{$article->title}}</h1>
-                <!-- Post Data: Byline, dateline -->
+                <h1>{{post.title}}</h1>
             </header>
             <main>
-                <!-- Article Content -->
-                <aside><img src=""></aside>
+                <aside><img :src="post.image"></aside>
             </main>
             <aside>
-                {{$article->content}}
+                {{post.content}}
             </aside>
             <footer>
-                {{$article->created_at}}
+                {{post.created_at}}
             </footer>
         </article>
-        @endforeach
     </div>
 </template>
 
 <script>
-    import api from '../../../app/Http/Controllers/Api/BlogFeedController.php';
+
     export default {
         name: "BlogFeedComponent",
-        article:{
-            type:json,
-            default:""
+        mounted() {
+            console.log(this);
+            this.getArticles();
+        },
+        data(){
+            return{
+                articles:[],
+            }
+        },
+
+        methods:{
+            getArticles(){
+                 self = this;
+                axios.get('../api/blogfeed').then(function(res){
+                    console.log(res.data);
+                   self.articles = res.data;
+                });
+            }
         }
 
     }

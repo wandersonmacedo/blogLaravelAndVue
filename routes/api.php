@@ -16,3 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::any('blogfeed' , 'Api\BlogFeedController@index');
+Route::any('submit' , 'Api\FormHandle@store');
+Route::any('getCategories' , 'Api\CategoriesController@index');

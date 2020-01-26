@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Models\Categories;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 
-class CategoriesController extends Controller
+class FormHandle extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +15,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return Categories::all();
+        //
     }
 
     /**
@@ -28,7 +26,28 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-
+        if($request["source"]=="category"){
+            $this->validate($request,[
+                'name' => 'required|string'
+            ]);
+            Categories::create([
+                'name' => $request["name"],
+                'created_by' => 1,
+                'created_at' => Date('Y-m-d'),
+                'updated_at' => Date('Y-m-d')
+            ]);
+        }
+        if($request["source"]=="article"){
+            $this->validate($request,[
+                'name' => 'required|string'
+            ]);
+            Categories::create([
+                'name' => $request["name"],
+                'created_by' => 1,
+                'created_at' => Date('Y-m-d'),
+                'updated_at' => Date('Y-m-d')
+            ]);
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Models\Articles;
+use App\Http\Models\Categories;
 use Illuminate\Http\Request;
 
 class BlogFeedController extends Controller
@@ -15,8 +16,7 @@ class BlogFeedController extends Controller
      */
     public function index()
     {
-        $articles = Articles::all();
-        return view('blogFeed')->with(compact('articles'));
+        return Articles::all();
     }
 
     /**
@@ -27,7 +27,16 @@ class BlogFeedController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required|string'
+        ]);
+        Articles::create([
+            'title' => $request["name"],
+            'categories_id' => $request["categories_id"],
+            'author' => 1,
+            'created_at' => Date('Y-m-d'),
+            'updated_at' => Date('Y-m-d')
+        ]);
     }
 
     /**

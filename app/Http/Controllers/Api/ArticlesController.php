@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Models\Categories;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 
-class CategoriesController extends Controller
+class ArticlesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +14,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return Categories::all();
+        //
     }
 
     /**
@@ -28,7 +25,7 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-
+        //
     }
 
     /**
