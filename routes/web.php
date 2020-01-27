@@ -16,4 +16,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/addArticle','ArticlesController@addArticle');
+Route::get('/setArticle/{id}','ArticlesController@addArticle');
 Route::get('/addCategory','CategoriesController@addCategory');

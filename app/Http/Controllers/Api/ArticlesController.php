@@ -26,7 +26,25 @@ class ArticlesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'title' => 'required|string',
+            'category' => 'required|int',
+            'content' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $article = new Articles();
+        $timestampName = $article->articleImage($request);
+
+        return Articles::create([
+            'title' => $request["title"],
+            'categorie_id' => $request["category"],
+            'content' => $request["content"],
+            'image' => $timestampName,
+            'author' => $request["author"],
+            'created_at' => Date('Y-m-d'),
+            'updated_at' => Date('Y-m-d')
+        ]);
     }
 
     /**

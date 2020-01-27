@@ -17,7 +17,7 @@
                         <th scope="row">{{post.articleid}}</th>
                         <td>{{post.title}}</td>
                         <td>{{post.name}}</td>
-                        <td><button>editar</button> / <button @click="deleteArticle(post.articleid)">Excluir</button></td>
+                        <td><a v-bind:href="'/setArticle/' + post.articleid"> <button>editar</button></a> / <button @click="deleteArticle(post.articleid)">Excluir</button></td>
                     </tr>
                     </tbody>
                 </table>
@@ -51,12 +51,12 @@
                 });
             },
             deleteArticle(id){
-                if(!confirm('Tem certeza?'))return;
+                self = this;
+                if(!confirm('Tem certeza que deseja excluir este artigo?'))return;
                 axios.delete('../api/articles/' + id ).then(function(res){
-
+                    self.getArticles();
                 });
-                this.$forceUpdate();
-                this.getArticles();
+
             }
         }
     }

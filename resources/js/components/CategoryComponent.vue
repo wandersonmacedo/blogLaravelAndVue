@@ -11,6 +11,23 @@
                 <input type="submit" value="Enviar" >
             </div>
         </form>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Ação</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for='cat in categories' :key='cat.id'>
+                <th scope="row">{{cat.id}}</th>
+                <td>{{cat.name}}</td>
+                <td><button @click="getOneCategory(cat)">editar</button> / <button @click="deleteCategory(cat.id)">Excluir</button></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -19,7 +36,8 @@
         name: "CategoryComponent",
         props: ['currentUser'],
         mounted() {
-            console.log()
+            console.log();
+            this.getCategories();
         },
         data() {
             return {
@@ -27,6 +45,7 @@
                 errors: {},
                 success: false,
                 loaded:true,
+                categories:[]
             }
         },
         methods: {
@@ -36,11 +55,11 @@
                     this.success = false;
                     this.errors = {};
                     this.fields.created_by = this.currentUser.id;
-                    this.fields.source = "category";
-                    axios.post('../api/submit', this.fields).then(response => {
+                    axios.post('../api/categories', this.fields).then(response => {
                         this.fields = {}; //Clear input fields.
                         this.loaded = true;
                         this.success = true;
+                        self.getCategories();
                     }).catch(error => {
                         this.loaded = true;
                         if (error.response.status === 422) {
@@ -49,6 +68,24 @@
                     });
                 }
             },
+            getCategories(){
+                self = this;
+                axios.get('../api/categories').then(function(res){
+                    self.categories = res.data;
+                });
+            },
+            deleteCategory(id){
+                self = this;
+                if(!confirm('Tem certeza que deseja excluir esta categoria?'))return;
+                axios.delete('../api/categories/' + id).then(function(res){
+                    self.getCategories();
+                });
+            },
+            getOneCategory(row){
+                self = this;
+                self.fields.categoryId = row.id;
+                $("#name").val(row.name);
+            }
         },
     }
 </script>

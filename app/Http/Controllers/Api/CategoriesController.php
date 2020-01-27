@@ -28,8 +28,20 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-
+        $this->validate($request,[
+            'name' => 'required|string'
+        ]);
+        if(!empty($request["categoryId"])){
+            return $this->update($request,$request["categoryId"]);
+        }
+        return Categories::create([
+            'name' => $request["name"],
+            'created_by' => $request["created_by"],
+            'created_at' => Date('Y-m-d'),
+            'updated_at' => Date('Y-m-d')
+        ]);
     }
+
 
     /**
      * Display the specified resource.
@@ -51,7 +63,11 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // check if currently authenticated user is the owner of the book
+        $category = Categories::findOrFail($id);
+        $category->name = $request["name"];
+        $category->save();
+        return 'saved';
     }
 
     /**
@@ -62,6 +78,6 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Categories::destroy($id);
     }
 }

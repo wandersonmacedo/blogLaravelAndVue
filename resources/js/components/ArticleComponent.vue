@@ -37,9 +37,11 @@
 <script>
     export default {
         name: "ArticleComponent",
-        props: ['currentUser'],
+        props: ['currentUser','update'],
         mounted() {
             this.getCategories();
+            this.onLoad();
+            console.log(this.update);
         },
         data(){
             return{
@@ -55,13 +57,19 @@
         methods:{
             getCategories(){
                 self = this;
-                axios.get('../api/getCategories').then(function(res){
-                    console.log(res.data);
+                axios.get('../api/categories').then(function(res){
                     self.categories = res.data;
                 });
             },
             onImageChange(e){
                 this.fields.image = e.target.files[0];
+            },
+            onLoad(){
+                $("#title").val(this.update.title);
+                $("#category").val(this.update.categorie_id);
+                $("#content").val(this.update.content);
+                $("#image").val(this.update.image);
+
             },
             submit() {
                 let formData = new FormData();
@@ -78,7 +86,7 @@
                     this.loaded = false;
                     this.success = false;
                     this.errors = {};
-                    axios.post('../api/submit', formData, { headers: {'Content-Type': 'multipart/form-data'}
+                    axios.post('../api/articles', formData, { headers: {'Content-Type': 'multipart/form-data'}
                         }).then(response => {
                             this.fields = {}; //Clear input fields.
                             this.loaded = true;
@@ -91,6 +99,7 @@
                         });
                 }
             },
+
         }
     }
 </script>

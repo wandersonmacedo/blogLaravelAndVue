@@ -1946,9 +1946,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ArticleComponent",
-  props: ['currentUser'],
+  props: ['currentUser', 'update'],
   mounted: function mounted() {
     this.getCategories();
+    this.onLoad();
+    console.log(this.update);
   },
   data: function data() {
     return {
@@ -1963,13 +1965,18 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getCategories: function getCategories() {
       self = this;
-      axios.get('../api/getCategories').then(function (res) {
-        console.log(res.data);
+      axios.get('../api/categories').then(function (res) {
         self.categories = res.data;
       });
     },
     onImageChange: function onImageChange(e) {
       this.fields.image = e.target.files[0];
+    },
+    onLoad: function onLoad() {
+      $("#title").val(this.update.title);
+      $("#category").val(this.update.categorie_id);
+      $("#content").val(this.update.content);
+      $("#image").val(this.update.image);
     },
     submit: function submit() {
       var _this = this;
@@ -1986,7 +1993,7 @@ __webpack_require__.r(__webpack_exports__);
         this.loaded = false;
         this.success = false;
         this.errors = {};
-        axios.post('../api/submit', formData, {
+        axios.post('../api/articles', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -2086,18 +2093,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CategoryComponent",
   props: ['currentUser'],
   mounted: function mounted() {
     console.log();
+    this.getCategories();
   },
   data: function data() {
     return {
       fields: {},
       errors: {},
       success: false,
-      loaded: true
+      loaded: true,
+      categories: []
     };
   },
   methods: {
@@ -2109,12 +2135,12 @@ __webpack_require__.r(__webpack_exports__);
         this.success = false;
         this.errors = {};
         this.fields.created_by = this.currentUser.id;
-        this.fields.source = "category";
-        axios.post('../api/submit', this.fields).then(function (response) {
+        axios.post('../api/categories', this.fields).then(function (response) {
           _this.fields = {}; //Clear input fields.
 
           _this.loaded = true;
           _this.success = true;
+          self.getCategories();
         })["catch"](function (error) {
           _this.loaded = true;
 
@@ -2123,6 +2149,24 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
       }
+    },
+    getCategories: function getCategories() {
+      self = this;
+      axios.get('../api/categories').then(function (res) {
+        self.categories = res.data;
+      });
+    },
+    deleteCategory: function deleteCategory(id) {
+      self = this;
+      if (!confirm('Tem certeza que deseja excluir esta categoria?')) return;
+      axios["delete"]('../api/categories/' + id).then(function (res) {
+        self.getCategories();
+      });
+    },
+    getOneCategory: function getOneCategory(row) {
+      self = this;
+      self.fields.categoryId = row.id;
+      $("#name").val(row.name);
     }
   }
 });
@@ -2189,10 +2233,11 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     deleteArticle: function deleteArticle(id) {
-      if (!confirm('Tem certeza?')) return;
-      axios["delete"]('../api/articles/' + id).then(function (res) {});
-      this.$forceUpdate();
-      this.getArticles();
+      self = this;
+      if (!confirm('Tem certeza que deseja excluir este artigo?')) return;
+      axios["delete"]('../api/articles/' + id).then(function (res) {
+        self.getArticles();
+      });
     }
   }
 });
@@ -37894,7 +37939,49 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0)
       ]
-    )
+    ),
+    _vm._v(" "),
+    _c("table", { staticClass: "table table-striped" }, [
+      _vm._m(1),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.categories, function(cat) {
+          return _c("tr", { key: cat.id }, [
+            _c("th", { attrs: { scope: "row" } }, [_vm._v(_vm._s(cat.id))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(cat.name))]),
+            _vm._v(" "),
+            _c("td", [
+              _c(
+                "button",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.getOneCategory(cat)
+                    }
+                  }
+                },
+                [_vm._v("editar")]
+              ),
+              _vm._v(" / "),
+              _c(
+                "button",
+                {
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteCategory(cat.id)
+                    }
+                  }
+                },
+                [_vm._v("Excluir")]
+              )
+            ])
+          ])
+        }),
+        0
+      )
+    ])
   ])
 }
 var staticRenderFns = [
@@ -37904,6 +37991,20 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group" }, [
       _c("input", { attrs: { type: "submit", value: "Enviar" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Nome")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Ação")])
+      ])
     ])
   }
 ]
@@ -37949,7 +38050,11 @@ var render = function() {
                 _c("td", [_vm._v(_vm._s(post.name))]),
                 _vm._v(" "),
                 _c("td", [
-                  _c("button", [_vm._v("editar")]),
+                  _c(
+                    "a",
+                    { attrs: { href: "/setArticle/" + post.articleid } },
+                    [_c("button", [_vm._v("editar")])]
+                  ),
                   _vm._v(" / "),
                   _c(
                     "button",
