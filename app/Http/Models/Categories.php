@@ -14,4 +14,8 @@ class Categories extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function article(){
+        return $this->belongsTo('App\Http\Models\Articles','created_by');
+    }
 }

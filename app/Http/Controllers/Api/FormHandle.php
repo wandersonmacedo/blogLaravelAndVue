@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Models\Articles;
 use App\Http\Models\Categories;
 use Illuminate\Http\Request;
 
@@ -13,6 +14,7 @@ class FormHandle extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         //
@@ -27,28 +29,47 @@ class FormHandle extends Controller
     public function store(Request $request)
     {
         if($request["source"]=="category"){
-            $this->validate($request,[
-                'name' => 'required|string'
-            ]);
-            Categories::create([
-                'name' => $request["name"],
-                'created_by' => 1,
-                'created_at' => Date('Y-m-d'),
-                'updated_at' => Date('Y-m-d')
-            ]);
+            return $this->validateAndSaveCategory($request);
         }
-        if($request["source"]=="article"){
-            $this->validate($request,[
-                'name' => 'required|string'
-            ]);
-            Categories::create([
-                'name' => $request["name"],
-                'created_by' => 1,
-                'created_at' => Date('Y-m-d'),
-                'updated_at' => Date('Y-m-d')
-            ]);
+        if($request["source"]=="articles"){
+            return $this->validateAndSaveArticle($request);
         }
     }
+
+    private function validateAndSaveCategory($request){
+        $this->validate($request,[
+            'name' => 'required|string'
+        ]);
+        return Categories::create([
+            'name' => $request["name"],
+            'created_by' => $request["created_by"],
+            'created_at' => Date('Y-m-d'),
+            'updated_at' => Date('Y-m-d')
+        ]);
+    }
+
+    private function validateAndSaveArticle($request){
+        $this->validate($request,[
+            'title' => 'required|string',
+            'category' => 'required|int',
+            'content' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $article = new Articles();
+        $timestampName = $article->articleImage($request);
+
+        return Articles::create([
+            'title' => $request["title"],
+            'categorie_id' => $request["category"],
+            'content' => $request["content"],
+            'image' => $timestampName,
+            'author' => $request["author"],
+            'created_at' => Date('Y-m-d'),
+            'updated_at' => Date('Y-m-d')
+        ]);
+    }
+
 
     /**
      * Display the specified resource.

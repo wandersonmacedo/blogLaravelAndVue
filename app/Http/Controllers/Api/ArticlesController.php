@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Models\Articles;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
@@ -59,6 +60,6 @@ class ArticlesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return  Articles::destroy($id);
     }
 }

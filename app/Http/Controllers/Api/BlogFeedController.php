@@ -16,7 +16,8 @@ class BlogFeedController extends Controller
      */
     public function index()
     {
-        return Articles::all();
+        $articles = new Articles();
+        return $articles->allArticles();
     }
 
     /**
@@ -27,16 +28,7 @@ class BlogFeedController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name' => 'required|string'
-        ]);
-        Articles::create([
-            'title' => $request["name"],
-            'categories_id' => $request["categories_id"],
-            'author' => 1,
-            'created_at' => Date('Y-m-d'),
-            'updated_at' => Date('Y-m-d')
-        ]);
+
     }
 
     /**

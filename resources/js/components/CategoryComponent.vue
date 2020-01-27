@@ -8,7 +8,6 @@
                 <div v-if="errors && errors.name" class="text-danger">{{ errors.name[0] }}</div>
             </div>
             <div class="form-group">
-                <input type="hidden" class="form-control" id="source" name="source" value="category">
                 <input type="submit" value="Enviar" >
             </div>
         </form>
@@ -18,9 +17,9 @@
 <script>
     export default {
         name: "CategoryComponent",
-        props:['userID'],
+        props: ['currentUser'],
         mounted() {
-            console.log(this.userID)
+            console.log()
         },
         data() {
             return {
@@ -36,6 +35,7 @@
                     this.loaded = false;
                     this.success = false;
                     this.errors = {};
+                    this.fields.created_by = this.currentUser.id;
                     this.fields.source = "category";
                     axios.post('../api/submit', this.fields).then(response => {
                         this.fields = {}; //Clear input fields.

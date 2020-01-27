@@ -1938,14 +1938,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ArticleComponent",
+  props: ['currentUser'],
   mounted: function mounted() {
     this.getCategories();
   },
   data: function data() {
     return {
-      categories: []
+      categories: [],
+      fields: {},
+      errors: {},
+      success: false,
+      loaded: true,
+      image: ''
     };
   },
   methods: {
@@ -1956,14 +1968,29 @@ __webpack_require__.r(__webpack_exports__);
         self.categories = res.data;
       });
     },
+    onImageChange: function onImageChange(e) {
+      this.fields.image = e.target.files[0];
+    },
     submit: function submit() {
       var _this = this;
+
+      var formData = new FormData();
+      formData.append('image', this.fields.image);
+      formData.append('title', this.fields.title);
+      formData.append('category', this.fields.category);
+      formData.append('content', this.fields.content);
+      formData.append('author', this.currentUser.id);
+      formData.append('source', "articles");
 
       if (this.loaded) {
         this.loaded = false;
         this.success = false;
         this.errors = {};
-        axios.post('../api/submit', this.fields).then(function (response) {
+        axios.post('../api/submit', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (response) {
           _this.fields = {}; //Clear input fields.
 
           _this.loaded = true;
@@ -2014,7 +2041,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "BlogFeedComponent",
   mounted: function mounted() {
-    console.log(this);
+    console.log();
     this.getArticles();
   },
   data: function data() {
@@ -2026,7 +2053,6 @@ __webpack_require__.r(__webpack_exports__);
     getArticles: function getArticles() {
       self = this;
       axios.get('../api/blogfeed').then(function (res) {
-        console.log(res.data);
         self.articles = res.data;
       });
     }
@@ -2060,12 +2086,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CategoryComponent",
-  props: ['userID'],
+  props: ['currentUser'],
   mounted: function mounted() {
-    console.log(this.userID);
+    console.log();
   },
   data: function data() {
     return {
@@ -2083,6 +2108,7 @@ __webpack_require__.r(__webpack_exports__);
         this.loaded = false;
         this.success = false;
         this.errors = {};
+        this.fields.created_by = this.currentUser.id;
         this.fields.source = "category";
         axios.post('../api/submit', this.fields).then(function (response) {
           _this.fields = {}; //Clear input fields.
@@ -2141,8 +2167,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "DashboardComponent"
+  name: "DashboardComponent",
+  mounted: function mounted() {
+    console.log();
+    this.getArticles();
+  },
+  data: function data() {
+    return {
+      articles: []
+    };
+  },
+  methods: {
+    getArticles: function getArticles() {
+      self = this;
+      axios.get('../api/blogfeed').then(function (res) {
+        self.articles = res.data;
+      });
+    },
+    deleteArticle: function deleteArticle(id) {
+      if (!confirm('Tem certeza?')) return;
+      axios["delete"]('../api/articles/' + id).then(function (res) {});
+      this.$forceUpdate();
+      this.getArticles();
+    }
+  }
 });
 
 /***/ }),
@@ -37553,96 +37605,163 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("h1", [_vm._v("Adicione aqui seu artigo!")]),
     _vm._v(" "),
-    _c("form", { attrs: { action: "", method: "post" } }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "" } }, [
-          _vm._v("Escolha a qual categoria pertence o seu artigo:")
+    _c(
+      "form",
+      {
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.submit($event)
+          }
+        }
+      },
+      [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "title" } }, [_vm._v("Titulo")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.fields.title,
+                expression: "fields.title"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              id: "title",
+              name: "title",
+              placeholder: "Titulo"
+            },
+            domProps: { value: _vm.fields.title },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.fields, "title", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.errors && _vm.errors.title
+            ? _c("div", { staticClass: "text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.title[0]))
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
-        _c(
-          "select",
-          {
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "category" } }, [
+            _vm._v("Escolha a qual categoria pertence o seu artigo:")
+          ]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.fields.category,
+                  expression: "fields.category"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { id: "category", name: "category" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.$set(
+                    _vm.fields,
+                    "category",
+                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                  )
+                }
+              }
+            },
+            _vm._l(_vm.categories, function(category) {
+              return _c(
+                "option",
+                { key: category.id, domProps: { value: category.id } },
+                [_vm._v(_vm._s(category.name))]
+              )
+            }),
+            0
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "content" } }, [
+            _vm._v("Escreva seu artigo:")
+          ]),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.fields.content,
+                expression: "fields.content"
+              }
+            ],
             staticClass: "form-control",
-            attrs: { id: "category", name: "category" }
-          },
-          _vm._l(_vm.categories, function(category) {
-            return _c(
-              "option",
-              { key: category.id, domProps: { value: category.id } },
-              [_vm._v(_vm._s(category.name))]
-            )
+            attrs: { id: "content", name: "content", rows: "3" },
+            domProps: { value: _vm.fields.content },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.fields, "content", $event.target.value)
+              }
+            }
           }),
-          0
-        )
-      ]),
-      _vm._v(" "),
-      _vm._m(1),
-      _vm._v(" "),
-      _vm._m(2),
-      _vm._v(" "),
-      _vm._m(3)
-    ])
+          _vm._v(" "),
+          _vm.errors && _vm.errors.content
+            ? _c("div", { staticClass: "text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.content[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "image" } }, [_vm._v("Imagem")]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "file", id: "image", name: "image" },
+            on: { change: _vm.onImageChange }
+          }),
+          _vm._v(" "),
+          _vm.errors && _vm.errors.image
+            ? _c("div", { staticClass: "text-danger" }, [
+                _vm._v(_vm._s(_vm.errors.image[0]))
+              ])
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _vm.success
+          ? _c("div", { staticClass: "alert alert-success mt-3" }, [
+              _vm._v("\n            Artigo salvo!\n        ")
+            ])
+          : _vm._e()
+      ]
+    )
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", { attrs: { for: "" } }, [_vm._v("Titulo")]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          id: "title",
-          name: "title",
-          placeholder: "Titulo"
-        }
-      }),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "hidden",
-          id: "source",
-          name: "source",
-          value: "article"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", { attrs: { for: "content" } }, [
-        _vm._v("Escreva seu artigo:")
-      ]),
-      _vm._v(" "),
-      _c("textarea", {
-        staticClass: "form-control",
-        attrs: { id: "content", name: "content", rows: "3" }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", { attrs: { for: "image" } }, [_vm._v("Imagem")]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "file", id: "image", name: "image" }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -37692,7 +37811,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("footer", [
-            _vm._v("\n            " + _vm._s(post.created_at) + "\n        ")
+            _vm._v("\n            " + _vm._s(post.name) + "\n        ")
           ])
         ])
       })
@@ -37784,16 +37903,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "hidden",
-          id: "source",
-          name: "source",
-          value: "category"
-        }
-      }),
-      _vm._v(" "),
       _c("input", { attrs: { type: "submit", value: "Enviar" } })
     ])
   }
@@ -37819,35 +37928,88 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-10" }, [
+        _c("h2", [_vm._v("Seus Artigos")]),
+        _vm._v(" "),
+        _c("table", { staticClass: "table table-striped" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.articles, function(post) {
+              return _c("tr", { key: post.id }, [
+                _c("th", { attrs: { scope: "row" } }, [
+                  _vm._v(_vm._s(post.articleid))
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(post.title))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(post.name))]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("button", [_vm._v("editar")]),
+                  _vm._v(" / "),
+                  _c(
+                    "button",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteArticle(post.articleid)
+                        }
+                      }
+                    },
+                    [_vm._v("Excluir")]
+                  )
+                ])
+              ])
+            }),
+            0
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(1)
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-10" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Dashboard")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n\n                    You are logged in!\n                "
-              )
-            ])
-          ])
-        ]),
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-2" }, [
-          _c("button", { staticClass: "button btn btn-success btn-sm" }, [
-            _vm._v("Criar Artigo")
-          ]),
-          _vm._v(" "),
-          _c("button", { staticClass: "button btn btn-success btn-sm" }, [
-            _vm._v("Criar Categoria")
-          ])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Título")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Categoria")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Ação")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-2" }, [
+      _c("a", { attrs: { href: "/addArticle" } }, [
+        _c(
+          "button",
+          {
+            staticClass: "button btn btn-success",
+            staticStyle: { "margin-bottom": "15px" }
+          },
+          [_vm._v("Criar Artigo")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("a", { attrs: { href: "/addCategory" } }, [
+        _c("button", { staticClass: "button btn btn-success" }, [
+          _vm._v("Criar Categoria")
         ])
       ])
     ])

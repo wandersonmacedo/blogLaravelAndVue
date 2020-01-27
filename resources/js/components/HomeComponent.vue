@@ -21,7 +21,7 @@
 <script>
 
     export default {
-        name: "BlogFeedComponent",
+        name: "HomeComponent",
         mounted() {
             console.log();
             this.getArticles();
@@ -34,9 +34,9 @@
 
         methods:{
             getArticles(){
-                 self = this;
+                self = this;
                 axios.get('../api/blogfeed').then(function(res){
-                   self.articles = res.data;
+                    self.articles = res.data;
                 });
             }
         }

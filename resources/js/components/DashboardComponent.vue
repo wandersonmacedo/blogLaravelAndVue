@@ -2,26 +2,29 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
-
-                <div class="card">
-                    <div class="card-header">Dashboard</div>
-                    <div class="card-body">
-                        <!--@if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                        @endif-->
-
-                        You are logged in!
-                    </div>
-                </div>
+                <h2>Seus Artigos</h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Título</th>
+                        <th scope="col">Categoria</th>
+                        <th scope="col">Ação</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for='post in articles' :key='post.id'>
+                        <th scope="row">{{post.articleid}}</th>
+                        <td>{{post.title}}</td>
+                        <td>{{post.name}}</td>
+                        <td><button>editar</button> / <button @click="deleteArticle(post.articleid)">Excluir</button></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="col-md-2">
-
-                <button class="button btn btn-success btn-sm">Criar Artigo</button>
-
-                <button class="button btn btn-success btn-sm">Criar Categoria</button>
-
+                <a href="/addArticle"><button class="button btn btn-success" style="margin-bottom:15px;">Criar Artigo</button></a>
+                <a href="/addCategory"><button class="button btn btn-success">Criar Categoria</button></a>
             </div>
         </div>
     </div>
@@ -29,7 +32,33 @@
 
 <script>
     export default {
-        name: "DashboardComponent"
+        name: "DashboardComponent",
+        mounted() {
+            console.log();
+            this.getArticles();
+        },
+        data(){
+            return{
+                articles:[],
+            }
+        },
+
+        methods:{
+            getArticles(){
+                self = this;
+                axios.get('../api/blogfeed').then(function(res){
+                    self.articles = res.data;
+                });
+            },
+            deleteArticle(id){
+                if(!confirm('Tem certeza?'))return;
+                axios.delete('../api/articles/' + id ).then(function(res){
+
+                });
+                this.$forceUpdate();
+                this.getArticles();
+            }
+        }
     }
 </script>
 
