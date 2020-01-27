@@ -1947,10 +1947,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ArticleComponent",
   props: ['currentUser', 'update'],
+  //debugger;
   mounted: function mounted() {
+    this.fields = JSON.parse(this.update); //$("#title").html(this.fields.title);
+
+    this.fields.category = this.fields.categorie_id; // $('#category option[value=' + this.fields.categorie_id +']').attr('selected','selected');
+    // $("#content").val(this.fields.content);
+
     this.getCategories();
-    this.onLoad();
-    console.log(this.update);
   },
   data: function data() {
     return {
@@ -1972,12 +1976,7 @@ __webpack_require__.r(__webpack_exports__);
     onImageChange: function onImageChange(e) {
       this.fields.image = e.target.files[0];
     },
-    onLoad: function onLoad() {
-      $("#title").val(this.update.title);
-      $("#category").val(this.update.categorie_id);
-      $("#content").val(this.update.content);
-      $("#image").val(this.update.image);
-    },
+    onLoad: function onLoad() {},
     submit: function submit() {
       var _this = this;
 
@@ -2004,10 +2003,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.success = true;
         })["catch"](function (error) {
           _this.loaded = true;
-
-          if (error.response.status === 422) {
-            _this.errors = error.response.data.errors || {};
-          }
+          _this.errors = error.response.data.errors || {};
         });
       }
     }

@@ -15,9 +15,9 @@ class ArticlesController extends Controller
         $this->middleware('auth');
     }
     public function addArticle($id = null){
-        $article = [];
+        $article = json_encode(['']);
         if(!empty($id)){
-            $article = Articles::find($id);
+            $article = Articles::findOrFail($id);
         }
         return view('addArticle')->with(compact('article'));
     }

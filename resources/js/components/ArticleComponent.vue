@@ -36,12 +36,14 @@
 
 <script>
     export default {
+
         name: "ArticleComponent",
         props: ['currentUser','update'],
-        mounted() {
-            this.getCategories();
-            this.onLoad();
-            console.log(this.update);
+        //debugger;
+    mounted() {
+        this.fields = JSON.parse(this.update);
+        this.fields.category = this.fields.categorie_id;
+        this.getCategories();
         },
         data(){
             return{
@@ -63,13 +65,6 @@
             },
             onImageChange(e){
                 this.fields.image = e.target.files[0];
-            },
-            onLoad(){
-                $("#title").val(this.update.title);
-                $("#category").val(this.update.categorie_id);
-                $("#content").val(this.update.content);
-                $("#image").val(this.update.image);
-
             },
             submit() {
                 let formData = new FormData();
@@ -93,9 +88,8 @@
                             this.success = true;
                         }).catch(error => {
                             this.loaded = true;
-                            if (error.response.status === 422) {
-                                this.errors = error.response.data.errors || {};
-                            }
+                            this.errors = error.response.data.errors || {};
+
                         });
                 }
             },
