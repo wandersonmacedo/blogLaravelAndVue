@@ -35,7 +35,6 @@
     </div>
 </template>
 <script>
-    window.Vue = require('vue');
     import paginate from 'laravel-vue-pagination';
     export default {
         name: "BlogFeedComponent",

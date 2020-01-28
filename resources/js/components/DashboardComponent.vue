@@ -28,7 +28,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for='post in articles' :key='post.articlesId'>
+                    <tr v-for='post in articles.data' :key='post.articlesId'>
                         <th scope="row">{{post.articlesId}}</th>
                         <td>{{post.title}}</td>
                         <td>{{post.categoryName}}</td>
@@ -43,19 +43,24 @@
                 <a href="/addCategory"><button class="button btn btn-success">Gerenciar Categorias</button></a>
             </div>
         </div>
+        <paginate :data="articles" @pagination-change-page="getArticles"></paginate>
     </div>
 </template>
 
 <script>
+    import paginate from 'laravel-vue-pagination';
     export default {
         name: "DashboardComponent",
         mounted() {
             console.log();
             this.getArticles();
         },
+        components: {
+            paginate,
+        },
         data(){
             return{
-                articles:[],
+                articles:{},
                 search:[]
             }
         },
@@ -65,9 +70,9 @@
             }
         },
         methods:{
-            getArticles() {
+            getArticles(page =1) {
                 self =this;
-                axios.get('../api/allarticles?page=',{params:{search:this.search}})
+                axios.get('../api/allarticles?page=' + page,{params:{search:this.search}})
                     .then(response => {
                         self.articles = response.data;
                         //console.log(this.articles.data);

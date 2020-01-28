@@ -2055,7 +2055,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "BlogFeedComponent",
@@ -2212,6 +2211,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var laravel_vue_pagination__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js");
+/* harmony import */ var laravel_vue_pagination__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(laravel_vue_pagination__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2260,15 +2261,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "DashboardComponent",
   mounted: function mounted() {
     console.log();
     this.getArticles();
   },
+  components: {
+    paginate: laravel_vue_pagination__WEBPACK_IMPORTED_MODULE_0___default.a
+  },
   data: function data() {
     return {
-      articles: [],
+      articles: {},
       search: []
     };
   },
@@ -2279,8 +2285,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getArticles: function getArticles() {
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       self = this;
-      axios.get('../api/allarticles?page=', {
+      axios.get('../api/allarticles?page=' + page, {
         params: {
           search: this.search
         }
@@ -39427,97 +39434,107 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-10" }, [
-        _c("div", { staticClass: "row" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-md-5" }, [
-            _c("div", { staticClass: "input-group mb-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.search,
-                    expression: "search"
-                  }
-                ],
-                staticClass: "form-control pull-right",
-                attrs: {
-                  type: "text",
-                  placeholder: "Procure seus artigos por titulo ou categoria"
-                },
-                domProps: { value: _vm.search },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-10" }, [
+          _c("div", { staticClass: "row" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-5" }, [
+              _c("div", { staticClass: "input-group mb-3" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.search,
+                      expression: "search"
                     }
-                    _vm.search = $event.target.value
+                  ],
+                  staticClass: "form-control pull-right",
+                  attrs: {
+                    type: "text",
+                    placeholder: "Procure seus artigos por titulo ou categoria"
+                  },
+                  domProps: { value: _vm.search },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.search = $event.target.value
+                    }
                   }
-                }
-              }),
-              _vm._v(" "),
-              _vm._m(1)
+                }),
+                _vm._v(" "),
+                _vm._m(1)
+              ])
             ])
+          ]),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c("table", { staticClass: "table table-striped" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.articles.data, function(post) {
+                return _c("tr", { key: post.articlesId }, [
+                  _c("th", { attrs: { scope: "row" } }, [
+                    _vm._v(_vm._s(post.articlesId))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(post.title))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(post.categoryName))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(post.author))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "a",
+                      { attrs: { href: "/setArticle/" + post.articlesId } },
+                      [
+                        _c("button", { staticClass: "btn btn-success" }, [
+                          _vm._v("editar")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteArticle(post.articlesId)
+                          }
+                        }
+                      },
+                      [_vm._v("Excluir")]
+                    )
+                  ])
+                ])
+              }),
+              0
+            )
           ])
         ]),
         _vm._v(" "),
-        _c("hr"),
-        _vm._v(" "),
-        _c("table", { staticClass: "table table-striped" }, [
-          _vm._m(2),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.articles, function(post) {
-              return _c("tr", { key: post.articlesId }, [
-                _c("th", { attrs: { scope: "row" } }, [
-                  _vm._v(_vm._s(post.articlesId))
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(post.title))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(post.categoryName))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(post.author))]),
-                _vm._v(" "),
-                _c("td", [
-                  _c(
-                    "a",
-                    { attrs: { href: "/setArticle/" + post.articlesId } },
-                    [
-                      _c("button", { staticClass: "btn btn-success" }, [
-                        _vm._v("editar")
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteArticle(post.articlesId)
-                        }
-                      }
-                    },
-                    [_vm._v("Excluir")]
-                  )
-                ])
-              ])
-            }),
-            0
-          )
-        ])
+        _vm._m(3)
       ]),
       _vm._v(" "),
-      _vm._m(3)
-    ])
-  ])
+      _c("paginate", {
+        attrs: { data: _vm.articles },
+        on: { "pagination-change-page": _vm.getArticles }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
