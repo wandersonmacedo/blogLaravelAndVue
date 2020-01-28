@@ -1,14 +1,15 @@
 <template>
     <div class="container">
-        <h1>Adicione aqui uma nova categoria!</h1>
+        <h1>Gerenciar categorias!</h1>
+
         <form @submit.prevent="submit">
             <div class="form-group">
-                <label for="">Nome</label>
+                <label for="">Adicione aqui uma nova categoria</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Nome" v-model="fields.name">
                 <div v-if="errors && errors.name" class="text-danger">{{ errors.name[0] }}</div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Enviar" >
+                <input type="submit" value="Salvar" class="btn btn-success" style="float:right">
             </div>
         </form>
 
@@ -24,7 +25,7 @@
             <tr v-for='cat in categories' :key='cat.id'>
                 <th scope="row">{{cat.id}}</th>
                 <td>{{cat.name}}</td>
-                <td><button @click="getOneCategory(cat)">editar</button> / <button @click="deleteCategory(cat.id)">Excluir</button></td>
+                <td><button @click="getOneCategory(cat)" class="btn btn-success">editar</button>  <button @click="deleteCategory(cat.id)" class="btn btn-danger">Excluir</button></td>
             </tr>
             </tbody>
         </table>
@@ -85,11 +86,27 @@
                 self = this;
                 self.fields.categoryId = row.id;
                 $("#name").val(row.name);
+                $("#name").addClass('glow');
+
+
             }
         },
     }
 </script>
 
 <style scoped>
+    .glow {
+        animation:glow 1200ms linear 200ms 2 alternate;
+        -moz-animation:glow 1200ms linear 200ms 2 alternate;
+        -webkit-animation:glow 1200ms linear 200ms 2 alternate;
+    }
 
+    @keyframes glow {
+        0% {
+            box-shadow:0 0 1px 1px rgba(255,255,255,0.9);
+        }
+        20%, 100% {
+            box-shadow:0 0 1px 1px rgba(255,255,255,0.9), 0 0 3px 8px #ffff00, 0 0 2px 12px #FFF;
+        }
+    }
 </style>

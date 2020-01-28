@@ -24,16 +24,9 @@ class BlogFeedController extends Controller
     public function allarticles(Request $request)
     {
 
-        $articles = Articles::join('categories','articles.categorie_id','=','categories.id')
-                            ->join('users','users.id','=','articles.author')
-                            ->select('categories.*','categories.name as categoryName','articles.*','articles.id as articlesId','users.name as author')
-                            ->where('title','like','%'.$request->search.'%')
-                            ->orWhere('users.name','like','%'.$request->search.'%')
-                            ->orWhere('categories.name','like','%'.$request->search.'%')
-                            ->get();
-
-
-        return response()->json($articles);
+        $articles = new Articles();
+        $returnArticles = $articles->allArticles($request);
+        return response()->json($returnArticles);
     }
 
     /**

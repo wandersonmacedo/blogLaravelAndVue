@@ -23,8 +23,14 @@ class Articles extends Model
         return $this->hasOne('App\Http\Models\Categories','categorie_id');
     }
 
-    public function allArticles(){
-        return Articles::join('categories','categories.id','=','articles.categorie_id')->select('articles.id as articleid','articles.*','categories.*')->get();
+    public function allArticles($request){
+        return Articles::join('categories','articles.categorie_id','=','categories.id')
+            ->join('users','users.id','=','articles.author')
+            ->select('categories.*','categories.name as categoryName','articles.*','articles.id as articlesId','users.name as author')
+            ->where('title','like','%'.$request->search.'%')
+            ->orWhere('users.name','like','%'.$request->search.'%')
+            ->orWhere('categories.name','like','%'.$request->search.'%')
+            ->get();
     }
 
 
