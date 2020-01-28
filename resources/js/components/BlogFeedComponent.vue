@@ -14,7 +14,7 @@
         </div>
         <hr>
         <div class="row">
-        <div class="col-md-3" v-for='post in articles' :key='post.articlesId'>
+        <div class="col-md-3" v-for='post in articles.data' :key='post.articlesId'>
             <div class="card" style="margin-bottom:15px;">
                 <img :src="post.image" class="card-img-top" alt="...">
                 <div class="card-body">
@@ -30,19 +30,24 @@
             </div>
         </div>
         </div>
+
+        <paginate :data="articles" @pagination-change-page="getArticles"></paginate>
     </div>
 </template>
-
 <script>
-
+    window.Vue = require('vue');
+    import paginate from 'laravel-vue-pagination';
     export default {
         name: "BlogFeedComponent",
         created() {
             this.getArticles();
         },
+        components: {
+            paginate,
+        },
         data(){
             return{
-                articles:[],
+                articles:{},
                 search:[]
             }
         },
@@ -52,9 +57,9 @@
             }
         },
         methods:{
-            getArticles() {
+            getArticles(page =1) {
                 self =this;
-                axios.get('../api/allarticles?page=',{params:{search:this.search}})
+                axios.get('../api/allarticles?page=' + page,{params:{search:this.search}})
                     .then(response => {
                         self.articles = response.data;
                         //console.log(this.articles.data);

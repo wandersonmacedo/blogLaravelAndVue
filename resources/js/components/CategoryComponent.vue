@@ -25,7 +25,10 @@
             <tr v-for='cat in categories' :key='cat.id'>
                 <th scope="row">{{cat.id}}</th>
                 <td>{{cat.name}}</td>
-                <td><button @click="getOneCategory(cat)" class="btn btn-success">editar</button>  <button @click="deleteCategory(cat.id)" class="btn btn-danger">Excluir</button></td>
+                <td>
+                    <button @click="getOneCategory(cat)" class="btn btn-success">editar</button>
+                    <button @click="deleteCategory(cat.id)" class="btn btn-danger">Excluir</button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -33,6 +36,7 @@
 </template>
 
 <script>
+
     export default {
         name: "CategoryComponent",
         props: ['currentUser'],
@@ -45,8 +49,8 @@
                 fields: {},
                 errors: {},
                 success: false,
-                loaded:true,
-                categories:[]
+                loaded: true,
+                categories: []
             }
         },
         methods: {
@@ -69,20 +73,20 @@
                     });
                 }
             },
-            getCategories(){
+            getCategories() {
                 self = this;
-                axios.get('../api/categories').then(function(res){
+                axios.get('../api/categories').then(function (res) {
                     self.categories = res.data;
                 });
             },
-            deleteCategory(id){
+            deleteCategory(id) {
                 self = this;
-                if(!confirm('Tem certeza que deseja excluir esta categoria?'))return;
-                axios.delete('../api/categories/' + id).then(function(res){
+                if (!confirm('Tem certeza que deseja excluir esta categoria?')) return;
+                axios.delete('../api/categories/' + id).then(function (res) {
                     self.getCategories();
                 });
             },
-            getOneCategory(row){
+            getOneCategory(row) {
                 self = this;
                 self.fields.categoryId = row.id;
                 $("#name").val(row.name);
@@ -96,17 +100,17 @@
 
 <style scoped>
     .glow {
-        animation:glow 1200ms linear 200ms 2 alternate;
-        -moz-animation:glow 1200ms linear 200ms 2 alternate;
-        -webkit-animation:glow 1200ms linear 200ms 2 alternate;
+        animation: glow 1200ms linear 200ms 2 alternate;
+        -moz-animation: glow 1200ms linear 200ms 2 alternate;
+        -webkit-animation: glow 1200ms linear 200ms 2 alternate;
     }
 
     @keyframes glow {
         0% {
-            box-shadow:0 0 1px 1px rgba(255,255,255,0.9);
+            box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.9);
         }
         20%, 100% {
-            box-shadow:0 0 1px 1px rgba(255,255,255,0.9), 0 0 3px 8px #ffff00, 0 0 2px 12px #FFF;
+            box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.9), 0 0 3px 8px #ffff00, 0 0 2px 12px #FFF;
         }
     }
 </style>

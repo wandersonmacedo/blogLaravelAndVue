@@ -2,5 +2,4 @@
 
     @section('content')
         <blogfeed-component></blogfeed-component>
-
     @endsection
