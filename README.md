@@ -18,6 +18,9 @@ rode as migrations 'php artisan migrate'
 
 de permissão para a pasta /storage 
 
+Para acessar o projeto funcionando basta acessar o meu heroku
+http://blogwithvue.herokuapp.com/
+
 
 
 
