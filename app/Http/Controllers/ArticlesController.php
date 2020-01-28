@@ -21,4 +21,7 @@ class ArticlesController extends Controller
         }
         return view('addArticle')->with(compact('article'));
     }
+
+
+
 }

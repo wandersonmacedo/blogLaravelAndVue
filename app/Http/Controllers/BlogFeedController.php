@@ -12,4 +12,10 @@ class BlogFeedController extends Controller
         $articles = Articles::all();
         return view('blogFeed')->with(compact('articles'));
     }
+
+    public function viewArticle($id){
+        $articles = new Articles();
+        $article = $articles->fullArticle($id);
+        return view('showArticle')->with(compact('article'));
+    }
 }

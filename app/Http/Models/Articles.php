@@ -33,7 +33,13 @@ class Articles extends Model
             ->paginate(8);
     }
 
-
+    public function fullArticle($id){
+        return Articles::join('categories','articles.categorie_id','=','categories.id')
+            ->join('users','users.id','=','articles.author')
+            ->select('categories.*','categories.name as categoryName','articles.*','articles.id as articlesId','users.name as author')
+            ->Where('articles.id','=',$id)
+            ->get();
+    }
     public function articleImage($request){
         $image = $request->file('image');
         $extension = $image->getClientOriginalExtension();

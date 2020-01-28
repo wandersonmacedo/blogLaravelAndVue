@@ -39211,7 +39211,16 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(2, true)
+                _c("div", { staticClass: "card-body" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "card-link",
+                      attrs: { href: "/showArticle/" + post.articlesId }
+                    },
+                    [_vm._v("Veja o artigo")]
+                  )
+                ])
               ]
             )
           ])
@@ -39249,16 +39258,6 @@ var staticRenderFns = [
         },
         [_vm._v("Busca")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body" }, [
-      _c("a", { staticClass: "card-link", attrs: { href: "#" } }, [
-        _vm._v("Veja o artigo")
-      ])
     ])
   }
 ]

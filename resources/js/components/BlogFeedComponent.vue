@@ -25,7 +25,7 @@
                     <li class="list-group-item">Autor:{{post.author}}</li>
                 </ul>
                 <div class="card-body">
-                    <a href="#" class="card-link">Veja o artigo</a>
+                    <a :href="'/showArticle/' + post.articlesId" class="card-link">Veja o artigo</a>
                 </div>
             </div>
         </div>

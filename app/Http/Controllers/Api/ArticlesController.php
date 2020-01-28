@@ -55,7 +55,10 @@ class ArticlesController extends Controller
      */
     public function show($id)
     {
-        //
+        $articles = new Articles();
+        $returnArticle = $articles->fullArticle($id);
+        return response()->json($returnArticle);
+
     }
 
     /**
