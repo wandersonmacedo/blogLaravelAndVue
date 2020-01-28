@@ -6,7 +6,7 @@
                 <h1>{{post.title}}</h1>
             </header>
             <main>
-                <aside><img :src="post.image"></aside>
+                <aside><img v-bind:src="post.image"></aside>
             </main>
             <aside>
                 {{post.content}}
@@ -35,7 +35,7 @@
         methods:{
             getArticles(){
                 self = this;
-                axios.get('../api/blogfeed').then(function(res){
+                axios.get('../api/allarticles').then(function(res){
                     self.articles = res.data;
                 });
             }

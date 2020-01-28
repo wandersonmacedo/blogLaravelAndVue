@@ -32,7 +32,7 @@ class Articles extends Model
         $image = $request->file('image');
         $extension = $image->getClientOriginalExtension();
         $timestampName = microtime(true) . '.' . $extension;
-        $request->image->move(public_path('/images/'), $timestampName);
+        $request->image->move(storage_path().'/images/', $timestampName);
 
         return $timestampName;
     }

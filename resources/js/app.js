@@ -24,6 +24,7 @@ Vue.component('category-component', require('./components/CategoryComponent.vue'
 Vue.component('dashboard-component', require('./components/DashboardComponent.vue').default);
 Vue.component('blogfeed-component', require('./components/BlogFeedComponent.vue').default);
 Vue.component('article-component', require('./components/ArticleComponent.vue').default);
+Vue.component('paginate-component', require('laravel-vue-pagination').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
