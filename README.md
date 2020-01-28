@@ -1,3 +1,32 @@
+Development Environment
+
+Requirements
+
+PHP 7.3+ / Mysql 8 / VueJs / Composer / redis
+
+Instalação
+
+clone este repositório em um ambiente com nginx ou apache
+
+.ENV
+DB_HOST = host do seu mysql IP
+DB_REDIS = host do seu redis IP
+
+rode o composer 'composer install --ignore-platform-reqs'
+
+rode as migrations 'php artisan migrate'
+
+de permissão para a pasta /storage 
+
+Para acessar o projeto funcionando basta acessar o meu heroku
+http://blogwithvue.herokuapp.com/
+
+
+
+
+
+
+
 <p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
 
 <p align="center">
@@ -76,3 +105,4 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+

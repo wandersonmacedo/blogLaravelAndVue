@@ -20,6 +20,12 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('category-component', require('./components/CategoryComponent.vue').default);
+Vue.component('dashboard-component', require('./components/DashboardComponent.vue').default);
+Vue.component('blogfeed-component', require('./components/BlogFeedComponent.vue').default);
+Vue.component('article-component', require('./components/ArticleComponent.vue').default);
+Vue.component('paginate', require('laravel-vue-pagination').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
