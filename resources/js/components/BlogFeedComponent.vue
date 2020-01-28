@@ -14,7 +14,7 @@
                 <h1>{{post.title}}</h1>
             </header>
             <main>
-                <aside><img src="26069.jpg"></aside>
+                <aside><img :src="post.image"></aside>
             </main>
             <aside>
                 {{post.content}}
@@ -31,9 +31,7 @@
     export default {
         name: "BlogFeedComponent",
         created() {
-            console.log(this.getArticles())
-            console.log(this.search);
-
+            this.getArticles();
         },
         data(){
             return{

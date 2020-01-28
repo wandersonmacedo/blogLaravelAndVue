@@ -2048,8 +2048,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "BlogFeedComponent",
   created: function created() {
-    console.log(this.getArticles());
-    console.log(this.search);
+    this.getArticles();
   },
   data: function data() {
     return {
@@ -2265,7 +2264,6 @@ __webpack_require__.r(__webpack_exports__);
       self = this;
       if (!confirm('Tem certeza que deseja excluir este artigo?')) return;
       axios["delete"]('../api/articles/' + id).then(function (res) {
-        console.log(res);
         self.getArticles();
       });
     }
@@ -38498,7 +38496,9 @@ var render = function() {
         return _c("article", { key: post.articlesId }, [
           _c("header", [_c("h1", [_vm._v(_vm._s(post.title))])]),
           _vm._v(" "),
-          _vm._m(1, true),
+          _c("main", [
+            _c("aside", [_c("img", { attrs: { src: post.image } })])
+          ]),
           _vm._v(" "),
           _c("aside", [
             _vm._v("\n            " + _vm._s(post.content) + "\n        ")
@@ -38527,14 +38527,6 @@ var staticRenderFns = [
         },
         [_vm._v("Button")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("main", [
-      _c("aside", [_c("img", { attrs: { src: "26069.jpg" } })])
     ])
   }
 ]

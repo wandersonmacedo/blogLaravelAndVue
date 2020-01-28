@@ -70,7 +70,6 @@
                 self = this;
                 if(!confirm('Tem certeza que deseja excluir este artigo?'))return;
                 axios.delete('../api/articles/' + id ).then(function(res){
-                    console.log(res);
                     self.getArticles();
                 });
 
