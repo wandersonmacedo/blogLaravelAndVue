@@ -72,7 +72,7 @@
         methods:{
             getArticles(page =1) {
                 self =this;
-                axios.get('../api/allarticles?page=' + page,{params:{search:this.search}})
+                axios.get('../api/allarticles?page=' + page,{params:{search:self.search}})
                     .then(response => {
                         self.articles = response.data;
                         //console.log(this.articles.data);

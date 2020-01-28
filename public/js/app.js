@@ -2289,7 +2289,7 @@ __webpack_require__.r(__webpack_exports__);
       self = this;
       axios.get('../api/allarticles?page=' + page, {
         params: {
-          search: this.search
+          search: self.search
         }
       }).then(function (response) {
         self.articles = response.data; //console.log(this.articles.data);

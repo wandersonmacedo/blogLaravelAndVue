@@ -30,7 +30,7 @@ class Articles extends Model
             ->where('title','like','%'.$request->search.'%')
             ->orWhere('users.name','like','%'.$request->search.'%')
             ->orWhere('categories.name','like','%'.$request->search.'%')
-            ->paginate(5);
+            ->paginate(8);
     }
 
 
